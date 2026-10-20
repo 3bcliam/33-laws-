@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>33 Laws — Goal Frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#ECEEEA; --surface:#F8F9F6; --ink:#1D2227; --muted:#5C656D; --line:#C9CEC8;
+  --tape:#F2C12E; --tape-ink:#2A2410; --track:#DDE0DB;
+  --self:#2F6B4F; --story:#A8432C; --phil:#2D5885; --team:#6A5288;
+  --danger:#A8432C;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#14181B; --surface:#1D2226; --ink:#E7EAE5; --muted:#9AA3A9; --line:#343B40;
+    --tape:#E9B923; --tape-ink:#1E1A08; --track:#2A3035;
+    --self:#5FAE87; --story:#D9735B; --phil:#6E9BD0; --team:#A58BC7;
+    --danger:#E08068;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"Archivo",system-ui,sans-serif;font-size:16px;line-height:1.5;padding-bottom:88px}
+h1,h2,h3{font-stretch:72%;font-weight:800;line-height:1.05;margin:0}
+h1{font-size:2.1rem;letter-spacing:-.01em}
+h2{font-size:1.45rem;margin:28px 0 10px}
+h3{font-size:1.15rem}
+p{margin:.4em 0}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:6px}
+.sub{color:var(--muted);font-size:.92rem}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+.btn{background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:10px 16px;font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.small{padding:6px 11px;font-size:.88rem}
+.btn.danger{background:transparent;color:var(--danger);border:1.5px solid var(--line)}
+.icon-btn{background:transparent;border:1.5px solid var(--line);border-radius:6px;padding:6px 10px;font-weight:600}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0}
+.law-num{font-stretch:62%;font-weight:800;font-size:2.6rem;line-height:.9;color:var(--pc,var(--ink))}
+.pill{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:99px;border:1.5px solid var(--pc,var(--line));color:var(--pc,var(--ink))}
+.p-self{--pc:var(--self)} .p-story{--pc:var(--story)} .p-phil{--pc:var(--phil)} .p-team{--pc:var(--team)}
+.lotw{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;border-left:6px solid var(--pc)}
+.ask{font-weight:700;font-style:italic}
+.banner{background:var(--tape);color:var(--tape-ink);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;margin:12px 0}
+.banner .btn{background:var(--tape-ink);color:var(--tape)}
+.warn{border:1.5px dashed var(--line);border-radius:10px;padding:10px 14px;color:var(--muted);font-size:.9rem;margin:10px 0}
+
+/* Tape measure: the one bold element */
+.tape{position:relative;height:30px;display:flex;align-items:center}
+.tape .case{width:30px;height:30px;border-radius:7px;background:var(--ink);flex:none;position:relative;z-index:2}
+.tape .case::after{content:"";position:absolute;inset:9px;border-radius:50%;border:2px solid var(--tape)}
+.tape .track{flex:1;height:14px;background:var(--track);border-radius:0 3px 3px 0;position:relative;overflow:hidden}
+.tape .blade{height:100%;background:
+  repeating-linear-gradient(90deg,var(--tape-ink) 0 1px,transparent 1px 10%),
+  repeating-linear-gradient(90deg,var(--tape-ink) 0 1px,transparent 1px 2%) 0 0/100% 45% no-repeat,
+  var(--tape);
+  background-size:100% 100%,100% 45%,auto;
+  transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.tape .hook{position:absolute;top:0;bottom:0;width:4px;background:var(--tape-ink);border-radius:0 2px 2px 0}
+.tape .read{margin-left:10px;font-stretch:72%;font-weight:800;font-size:1.05rem;min-width:44px;text-align:right}
+@media (prefers-reduced-motion:reduce){.tape .blade{transition:none}}
+
+.goal{border-left:6px solid var(--pc)}
+.goal-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.goal h3{margin:4px 0 2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-size:.8rem;padding:2px 8px;border-radius:5px;background:var(--track);color:var(--ink)}
+.steps{list-style:none;margin:10px 0;padding:0}
+.steps li{display:flex;gap:10px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:0}
+.steps input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);flex:none}
+.steps .done span{text-decoration:line-through;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.last{font-size:.88rem;color:var(--muted);margin-top:6px}
+
+.pillars{display:grid;grid-template-columns:1fr;gap:10px}
+.pillar-row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center}
+.pillar-row b{color:var(--pc);font-stretch:72%;font-size:1.1rem}
+.pillar-row small{display:block;color:var(--muted);font-weight:400;font-stretch:100%;font-size:.78rem}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+.filters button{border:1.5px solid var(--line);background:transparent;border-radius:99px;padding:5px 12px;font-weight:600;font-size:.9rem}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+details.law{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:8px 0;border-left:6px solid var(--pc)}
+details.law summary{list-style:none;display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;padding:12px 14px;cursor:pointer}
+details.law summary::-webkit-details-marker{display:none}
+details.law summary .law-num{font-size:2rem}
+details.law summary span{font-weight:700;line-height:1.25}
+details.law .body{padding:0 14px 14px 76px}
+details.law .body h4{margin:12px 0 2px;font-size:.85rem;color:var(--muted);font-weight:700}
+@media (max-width:480px){details.law .body{padding-left:14px}}
+
+form label{display:block;font-weight:700;margin:16px 0 4px}
+form .hint{font-weight:400;color:var(--muted);font-size:.88rem;display:block}
+input[type=text],input[type=date],select,textarea{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:7px;padding:10px 12px}
+textarea{min-height:76px;resize:vertical}
+.buckets{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
+.buckets label{margin:0;font-weight:600;font-size:.8rem;text-align:center;border:1.5px solid var(--line);border-radius:7px;padding:8px 2px;cursor:pointer;background:var(--surface)}
+.buckets input{position:absolute;opacity:0;pointer-events:none}
+.buckets label:has(input:checked){background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.buckets label:has(input:focus-visible){outline:3px solid var(--tape)}
+.slider{display:grid;grid-template-columns:1fr 36px;gap:10px;align-items:center}
+.slider input{accent-color:var(--ink)}
+.slider output{font-weight:800;font-stretch:72%;font-size:1.2rem;text-align:right}
+.equation{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding:12px;border-radius:8px;background:var(--track)}
+.equation strong{font-stretch:62%;font-size:2.4rem;line-height:1}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label{margin:0;font-weight:600;border:1.5px solid var(--line);border-radius:7px;padding:7px 12px;cursor:pointer;background:var(--surface)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg label:has(input:focus-visible){outline:3px solid var(--tape)}
+.step-add{display:flex;gap:6px}
+.step-add input{flex:1}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:10}
+nav.tabs button{background:transparent;border:0;padding:12px 4px 14px;font-weight:700;font-size:.9rem;color:var(--muted);border-top:3px solid transparent}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-top-color:var(--tape)}
+.empty{text-align:left;padding:22px 16px}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:7px;font-weight:600;z-index:20;opacity:0;transition:opacity .2s}
+.toast.show{opacity:1}
+.mini-list li{padding:6px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.mini-list{list-style:none;padding:0;margin:0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav class="tabs" aria-label="Sections">
+  <button data-tab="plan">Plan</button>
+  <button data-tab="laws">Laws</button>
+  <button data-tab="new">New goal</button>
+  <button data-tab="checkin">Check-in</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- Content: the 33 laws (summaries written in plain words, applied to 3BC) ---------- */
+const PILLARS = {
+  self:  {name:"The Self",       cls:"p-self",  laws:"1–9",   about:"Get your own house in order: learning, beliefs, habits, health."},
+  story: {name:"The Story",      cls:"p-story", laws:"10–18", about:"How people perceive you and your business, and why they choose you."},
+  phil:  {name:"The Philosophy", cls:"p-phil",  laws:"19–27", about:"How you think about progress, failure, risk and discipline."},
+  team:  {name:"The Team",       cls:"p-team",  laws:"28–33", about:"Who you work with, how you lead them, and keeping the bar high."}
+};
+const L = (n,p,t,g,a,q)=>({n,p,t,g,a,q});
+const LAWS = [
+ L(1,"self","Fill your five buckets in the right order","Knowledge, then skills, then network, then resources, then reputation. Chasing the later buckets before the early ones are full builds on sand.","Which bucket is weakest for winning insurance-builder work right now? That's where this quarter's effort goes.","Will I spend 3 hours this week filling my weakest bucket?"),
+ L(2,"self","To master it, create an obligation to teach it","Committing to teach something in public forces you to actually understand it.","Turn something you know cold (scoping a reinstatement job, a framing fix) into a regular teaching post.","Will I post one teaching piece this week?"),
+ L(3,"self","You must never disagree","Leading with “I disagree” shuts the other person down. Start from shared ground, then work on the problem together.","Next time a builder or assessor pushes back on a variation, open with what you both want: job done right, on time.","Will I open my next tough conversation with agreement?"),
+ L(4,"self","You do not get to choose what you believe","Beliefs move with new first-hand evidence, not with arguments. Yours and other people's.","Don't argue your quality. Show it: before/after photos, references, a tidy completion pack.","Will I bring evidence instead of an argument?"),
+ L(5,"self","You must lean in to bizarre behaviour","The new thing people mock is often where the future is. Curiosity beats certainty.","Trial one tool others on site write off (AI quoting, scanning apps, new fixings).","Will I trial one new tool or method this month?"),
+ L(6,"self","Ask, don't tell","A yes/no question about your own behaviour drives follow-through better than an instruction.","Every goal in this app carries a “Will I…?” question. Answer it honestly at each check-in.","Will I answer my Will-I questions every week?"),
+ L(7,"self","Never compromise your self-story","Every small choice, especially unseen ones, is evidence for who you believe you are.","Pick one standard you never skip, like same-day invoicing or leaving every site clean.","Will I keep my non-negotiable today, even when no one's watching?"),
+ L(8,"self","Never fight a bad habit","Willpower runs out. Keep the cue, swap the routine, choose a better reward.","Find the cue behind the habit you want gone (e.g. phone after dinner instead of admin) and swap the routine.","Will I swap the routine rather than just try to stop?"),
+ L(9,"self","Always prioritise your first foundation","Health holds up the whole table: work, family, everything.","Protect training, food and sleep around long site days and late admin.","Will I hit my training and sleep plan this week?"),
+ L(10,"story","Useless absurdity will define you more than useful practicalities","The odd, memorable detail spreads further than the sensible features.","A signature touch clients talk about. A branded offcut keepsake left on every job, say.","Will I test one memorable touch this month?"),
+ L(11,"story","Avoid wallpaper at all costs","The brain tunes out familiar messages. Fresh, specific words get through.","Ban “quality workmanship” and “no job too small” from quotes, posts and the ute.","Will I rewrite one stale phrase today?"),
+ L(12,"story","You must piss people off","A clear stance turns some people away and pulls the right ones in. Indifference earns nothing.","Say plainly who 3BC is for and who it isn't, so the right builders self-select.","Will I publish one clear opinion this month?"),
+ L(13,"story","Shoot your psychological moonshots first","Cheap changes to how something feels often beat expensive changes to what it is. People remember the peak and the end.","Nail the moments that matter on insurance jobs: first contact, progress updates, handover.","Will I improve one client touchpoint this week?"),
+ L(14,"story","Friction can create value","Easy isn't always valued. A bit of effort or ceremony can make something feel worth more.","A short handover walk-through where the homeowner signs off each item.","Will I add one moment of deliberate ceremony to a job?"),
+ L(15,"story","The frame matters more than the picture","How something is presented changes what it seems to be worth.","Quote layout, job photos, uniform, the ute. The same work, framed better.","Will I upgrade how my next quote is presented?"),
+ L(16,"story","Use Goldilocks to your advantage","Give three options. The extremes anchor, the middle feels safe.","Good / better / best options on private-work quotes.","Will I send a three-option quote this month?"),
+ L(17,"story","Let them try and they will buy","Once people feel ownership, they value it more.","Offer a builder a first job to try you out, then make it the easiest job they run that month.","Will I offer one builder a trial job?"),
+ L(18,"story","Fight for the first five seconds","Attention is won or lost almost immediately.","The first line of every post, email to a builder, and phone opener.","Will I rewrite my opening line before I hit send?"),
+ L(19,"phil","You must sweat the small stuff","Tiny improvements compound into a big lead over people who ignore them.","1% gains in your job workflow: van layout, material lists, photo routine.","Will I make and log one small improvement this week?"),
+ L(20,"phil","A small miss now creates a big miss later","One degree off course today is miles off later. Correct early and often.","That's what the weekly check-in is for. Small corrections, every week.","Will I do my weekly check-in?"),
+ L(21,"phil","You must out-fail the competition","More experiments, more learning. Move fast on decisions you can reverse.","Run cheap tests: pitch five new builders, try a new post format, test a price.","Will I run one experiment this week?"),
+ L(22,"phil","You must become a Plan-A thinker","Dwelling on a backup plan quietly drains commitment to the main one.","Commit fully to the main goal. Keep a safety net in the background, not front of mind.","Will I go all-in on Plan A this week?"),
+ L(23,"phil","Don't be an ostrich","Avoiding uncomfortable information only makes it worse. Face it fast.","Look at the numbers, chase the overdue invoice, have the awkward conversation.","Will I face the thing I'm avoiding this week?"),
+ L(24,"phil","You must make pressure your privilege","Pressure means you're doing something that matters. How you frame it changes how it hits you.","Emergency call-outs and tight insurance timelines are proof builders trust you.","Will I reframe the next pressure moment as a privilege?"),
+ L(25,"phil","The power of negative manifestation","Imagine it already failed and work out why. Then fix those reasons first.","Every goal here gets a pre-mortem before it goes live.","Will I run a pre-mortem before I commit?"),
+ L(26,"phil","Your skills are worthless, but your context is valuable","A skill is worth what the market it's sold into will pay. The same skill is worth more where it's rare.","Where are your insurance-repair and carpentry skills rarest? Commercial, strata, emergency make-safe?","Will I test my skills in one new context?"),
+ L(27,"phil","The discipline equation","Discipline = value of the goal + reward of the pursuit − cost of the pursuit. Raise the first two, cut the third.","Every goal here is scored on it. A low score is a design problem, not a character flaw.","Will I lower the cost of my hardest goal this week?"),
+ L(28,"team","Ask who not how","Don't learn everything yourself. Find the person who already does it well.","Bookkeeper, labourer, reliable subbies, an apprentice. Who frees up your best hours?","Will I hand off one task this month?"),
+ L(29,"team","Create a cult mentality","A shared mission and identity bind early teams. Your first people set the culture.","Write 3BC's values down now, before the first hire, so they're the filter.","Will I write down 3BC's three values?"),
+ L(30,"team","The three bars for building great teams","Ask of anyone: if everyone were like them, would the bar go up, stay, or drop?","Run every subbie, labourer and future hire through it. Including the talented-but-difficult ones.","Will I apply the three bars to the next person I bring on?"),
+ L(31,"team","Leverage the power of progress","Feeling progress motivates more than anything. Break work into small wins and show them.","Every goal here gets small steps. Tick them, and the tape moves.","Will I tick off one step today?"),
+ L(32,"team","You must be an inconsistent leader","People differ. Adapt how you lead each one instead of treating everyone the same.","Note how each builder contact and subbie prefers to be dealt with, and match it.","Will I adjust my approach for one person this week?"),
+ L(33,"team","Learning never ends","It's a loop: learn, try, fail, adjust. Keep going.","Re-read one law a week. The Plan tab rotates a law of the week for this.","Will I re-read this week's law and act on it?")
+];
+/* Personal application + question for each law, in law order */
+const PERSONAL = [
+ ["Which bucket is weakest outside work: what you know about health, money, or the skills you want to pick up?","Will I spend 2 hours this week on my weakest personal bucket?"],
+ ["Teach someone at home what you're learning, like a budgeting habit or a training cue. Explaining it locks it in.","Will I explain one thing I've learned to someone at home this week?"],
+ ["When a disagreement starts at home, open with what you both want before getting into the detail.","Will I start my next disagreement at home with what we agree on?"],
+ ["A belief about yourself (“I'm not a morning person”) only shifts when you collect proof against it. Do it once.","Will I collect one piece of proof against a belief that's holding me back?"],
+ ["Try one thing outside your normal: a new training style, a book you'd usually skip, a different routine.","Will I try one unfamiliar thing this month?"],
+ ["Put your personal habits into Will-I questions and ask them first thing in the morning.","Will I ask myself my Will-I question each morning this week?"],
+ ["Pick one personal standard you never skip: the training session, no phone at dinner, lights out on time.","Will I keep my personal non-negotiable today?"],
+ ["Same loop at home. Find the cue behind the habit you want gone and swap in a better routine.","Will I swap the routine behind one habit this week?"],
+ ["Book training, meals and sleep in like jobs. They're what everything else sits on.","Will I treat my training like a booked job this week?"],
+ ["Small odd rituals are what people remember. Start a family tradition that's yours.","Will I start one small tradition this month?"],
+ ["Habituation hits relationships too. Swap the autopilot “how was your day?” for a real question.","Will I ask one better question at home this week?"],
+ ["Saying a clear no to things that don't fit your priorities will disappoint some people. That's the cost of focus.","Will I say one clear no this month?"],
+ ["Peak-end works at home. How the evening or the weekend ends is what everyone remembers.","Will I make the end of one day this week a good one?"],
+ ["Effort makes things matter. Cook the meal, build the thing, rather than always buying it.","Will I put my own work into one thing for the family this month?"],
+ ["Frame your goals so they pull you: “training for a challenge” beats “trying to get fit”.","Will I reframe one personal goal so it sounds worth it?"],
+ ["Use three levels on your own goals: minimum, target, stretch. The middle becomes the easy choice.","Will I set a minimum, target and stretch for one goal?"],
+ ["Trial a new habit for one week before going all in. Once you own it, you'll keep it.","Will I run a one-week trial before I commit to something big?"],
+ ["Own the first five minutes when you walk in the door. It sets the tone for the whole night.","Will I own the first five minutes when I get home this week?"],
+ ["1% gains at home: sleep routine, meal prep, the morning setup.","Will I make one small improvement at home this week?"],
+ ["A short weekly check-in with your partner catches the one-degree drifts before they become big ones.","Will I have one check-in conversation at home this week?"],
+ ["Try things you might be bad at: a new recipe, a new sport, a new skill. Failing is how you learn.","Will I try something I might fail at this week?"],
+ ["Pick the one personal goal that matters most and commit fully to it.","Will I go all-in on my main personal goal?"],
+ ["The bank balance, the health check you keep putting off, the conversation you're dodging. Look at it.","Will I face the personal thing I'm avoiding this week?"],
+ ["A full, busy family life is pressure you earned. Frame it that way.","Will I reframe one stressful moment this week as a privilege?"],
+ ["Pre-mortem your personal goals too. Why would the training plan or budget fall over by March?","Will I list why my main personal goal could fail?"],
+ ["Your building and problem-solving skills are rare outside the trade. Where else could they count: community, a side project?","Will I use my skills in one new setting?"],
+ ["Make the hard personal goal more rewarding and less costly: train with someone, prep the night before.","Will I make my hardest personal goal easier to start?"],
+ ["You don't have to do it all yourself at home either. A coach, shared chores, paid help.","Will I get help with one thing instead of doing it alone?"],
+ ["Families have a culture too. Decide on yours together.","Will I write down our family's three values together?"],
+ ["Look at who you spend your time with. Do they raise your bar, hold it, or lower it?","Will I spend more time with someone who raises my bar?"],
+ ["Make personal progress visible: a tracker on the fridge, ticks on a calendar.","Will I make my progress visible this week?"],
+ ["Everyone at home needs something different from you. Adapt to each person.","Will I adjust how I show up for one person at home this week?"],
+ ["Keep learning outside work: books, podcasts, a course, a new skill.","Will I learn one new thing outside work this week?"]
+];
+LAWS.forEach(l => { [l.h, l.hq] = PERSONAL[l.n-1]; });
+const AREAS = {biz:"3BC", life:"Personal"};
+const apply = (l,a) => a==="life" ? l.h : l.a;
+const askQ  = (l,a) => a==="life" ? l.hq : l.q;
+const BUCKETS = ["Knowledge","Skills","Network","Resources","Reputation"];
+const MAX_ACTIVE = 3; /* per area */
+
+/* ---------- Storage (localStorage with in-memory fallback) ---------- */
+const KEY = "33laws:v1";
+let memOnly = false;
+function load(){
+  try{ const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; }
+  catch(e){ memOnly = true; return null; }
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch(e){ memOnly = true; }
+}
+let state = load() || {goals:[]};
+state.goals.forEach(g => { if(!g.area) g.area = "biz"; });
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Math.random().toString(36).slice(2,10);
+const law = n => LAWS.find(l => l.n === +n);
+const fmt = d => new Date(d).toLocaleDateString("en-AU",{day:"numeric",month:"short"});
+const daysSince = d => Math.floor((Date.now() - new Date(d)) / 864e5);
+const active = a => state.goals.filter(g => g.status === "active" && (!a || g.area === a));
+const inArea = g => areaFilter === "all" || g.area === areaFilter;
+const progress = g => g.status === "done" ? 100 : (g.steps.length ? Math.round(g.steps.filter(s=>s.done).length / g.steps.length * 100) : 0);
+const dscore = s => s.value + s.reward - s.cost;
+function weekLaw(){
+  const wk = Math.floor((Date.now() - new Date(2026,0,5)) / (7*864e5));
+  return LAWS[((wk % 33) + 33) % 33];
+}
+function tape(pct, label){
+  return `<div class="tape" role="img" aria-label="${esc(label||"Progress")}: ${pct}%">
+    <div class="case"></div>
+    <div class="track"><div class="blade" style="width:${pct}%"></div>${pct>0?`<div class="hook" style="left:calc(${pct}% - 4px)"></div>`:""}</div>
+    <div class="read">${pct}%</div></div>`;
+}
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), 1800);
+}
+
+/* ---------- Views ---------- */
+let view = "plan", lawFilter = "all", areaFilter = "all", draftLaw = null, draftArea = "biz", draftSteps = [];
+
+function areaToggle(){
+  return `<div class="filters" role="group" aria-label="Show goals for">
+    ${[["all","Both"],["biz","3BC"],["life","Personal"]].map(([k,t])=>`<button data-area="${k}" aria-pressed="${areaFilter===k}">${t}</button>`).join("")}</div>`;
+}
+
+function viewPlan(){
+  const wl = weekLaw(), P = PILLARS[wl.p], act = active().filter(inArea);
+  const lastCheck = state.goals.flatMap(g=>g.checkins).map(c=>c.d).sort().pop();
+  const due = act.length && (!lastCheck || daysSince(lastCheck) >= 7);
+  let h = `<header class="top"><div><h1>Goal Frame</h1><div class="sub">The 33 laws, built into goals you can track.</div></div>
+    <button class="icon-btn" data-act="settings" aria-label="Backup and settings">Backup</button></header>`;
+  if(memOnly) h += `<div class="warn">This preview can't save. Open the file from your GitHub Pages site and your goals will stick.</div>`;
+  if(due) h += `<div class="banner"><span>Weekly check-in is due${lastCheck?` (last one ${fmt(lastCheck)})`:""}.</span><button class="btn small" data-tab="checkin">Check in</button></div>`;
+
+  h += `<h2>Law of the week</h2>
+    <div class="block lotw ${P.cls}"><div class="law-num">${wl.n}</div><div>
+      <span class="pill">${P.name}</span>
+      <h3 style="margin-top:6px">${esc(wl.t)}</h3><p>${esc(wl.g)}</p>
+      <p><b>3BC:</b> <span class="ask">${esc(wl.q)}</span></p>
+      <p><b>Personal:</b> <span class="ask">${esc(wl.hq)}</span></p>
+      <div class="row"><button class="btn small ghost" data-act="goal-from" data-law="${wl.n}" data-area="biz">Set a 3BC goal</button>
+      <button class="btn small ghost" data-act="goal-from" data-law="${wl.n}" data-area="life">Set a personal goal</button></div></div></div>`;
+
+  h += `<h2>Your goals</h2>` + areaToggle();
+  h += `<h3 style="margin:14px 0 6px">Pillar balance</h3><div class="block pillars">`;
+  for(const [k,P2] of Object.entries(PILLARS)){
+    const gs = state.goals.filter(g => inArea(g) && law(g.law).p === k && g.status !== "parked");
+    const avg = gs.length ? Math.round(gs.reduce((a,g)=>a+progress(g),0)/gs.length) : 0;
+    h += `<div class="pillar-row ${P2.cls}"><b>${P2.name}<small>${gs.length} goal${gs.length===1?"":"s"}</small></b>${tape(avg, P2.name)}</div>`;
+  }
+  h += `</div>`;
+
+  const counts = Object.entries(AREAS).map(([k,t])=>`${t} ${active(k).length}/${MAX_ACTIVE}`).join(", ");
+  h += `<h3 style="margin:18px 0 6px">Active goals <span class="sub">(${counts})</span></h3>`;
+  if(!act.length){
+    const what = areaFilter==="all" ? "" : AREAS[areaFilter].toLowerCase()+" ";
+    h += `<div class="block empty"><h3>No active ${what}goals yet</h3><p>Pick a law and turn it into one goal. Start with the pillar that's weakest.</p>
+      <div class="row"><button class="btn" data-tab="new">Set a goal</button><button class="btn ghost" data-tab="laws">Browse the laws</button></div></div>`;
+  }
+  act.forEach(g => h += goalCard(g));
+
+  const parked = state.goals.filter(g=>g.status==="parked" && inArea(g)), done = state.goals.filter(g=>g.status==="done" && inArea(g));
+  if(parked.length){
+    h += `<h2>Parked</h2><div class="block"><ul class="mini-list">` + parked.map(g =>
+      `<li><span><b>${AREAS[g.area]} · Law ${g.law}</b> · ${esc(g.title)}</span><span class="row" style="margin:0">
+        <button class="btn small ghost" data-act="activate" data-id="${g.id}" ${active(g.area).length>=MAX_ACTIVE?"disabled title='Finish or park an active goal in this area first'":""}>Make active</button>
+        <button class="btn small danger" data-act="delete" data-id="${g.id}">Delete</button></span></li>`).join("") + `</ul></div>`;
+  }
+  if(done.length){
+    h += `<h2>Done</h2><div class="block"><ul class="mini-list">` + done.map(g =>
+      `<li><span><b>${AREAS[g.area]} · Law ${g.law}</b> · ${esc(g.title)}</span><span class="sub">${g.doneAt?fmt(g.doneAt):""}</span></li>`).join("") + `</ul></div>`;
+  }
+  return h;
+}
+
+function goalCard(g){
+  const l = law(g.law), P = PILLARS[l.p], pct = progress(g), ds = dscore(g.scores);
+  const last = g.checkins[g.checkins.length-1];
+  const courseTxt = {on:"On line", off1:"1° off", off:"Way off"};
+  return `<div class="block goal ${P.cls}">
+    <div class="goal-head"><div><span class="pill">${AREAS[g.area]} · Law ${l.n} · ${P.name}</span><h3>${esc(g.title)}</h3></div></div>
+    <p class="ask">${esc(g.will)}</p>
+    ${tape(pct, g.title)}
+    <div class="chips">
+      <span class="chip">Bucket: ${esc(g.bucket)}</span>
+      <span class="chip">Discipline ${ds}</span>
+      ${g.due?`<span class="chip">Due ${fmt(g.due)}</span>`:""}
+    </div>
+    ${g.steps.length?`<ul class="steps">${g.steps.map(s=>`<li class="${s.done?"done":""}">
+      <input type="checkbox" id="s-${s.id}" data-act="step" data-id="${g.id}" data-step="${s.id}" ${s.done?"checked":""}>
+      <span><label for="s-${s.id}">${esc(s.text)}</label></span></li>`).join("")}</ul>`:`<p class="sub">No steps yet. Law 31 says break it down so you can feel it move.</p>`}
+    ${g.risks.filter(Boolean).length?`<details><summary class="sub" style="cursor:pointer">Pre-mortem (${g.risks.filter(Boolean).length})</summary><ul>${g.risks.filter(Boolean).map(r=>`<li>${esc(r)}</li>`).join("")}</ul></details>`:""}
+    ${last?`<div class="last">Last check-in ${fmt(last.d)}: ${courseTxt[last.course]}${last.fix?` — fix: ${esc(last.fix)}`:""}</div>`:""}
+    <div class="row">
+      <button class="btn small ghost" data-act="add-step" data-id="${g.id}">Add step</button>
+      <button class="btn small" data-act="done" data-id="${g.id}">Mark done</button>
+      <button class="btn small ghost" data-act="park" data-id="${g.id}">Park</button>
+      <button class="btn small danger" data-act="delete" data-id="${g.id}">Delete</button>
+    </div></div>`;
+}
+
+function viewLaws(){
+  let h = `<header class="top"><div><h1>The 33 laws</h1><div class="sub">Four pillars. Tap a law for the gist and how it applies to 3BC and to life outside work.</div></div></header>
+  <div class="filters" role="group" aria-label="Filter by pillar">
+    <button data-filter="all" aria-pressed="${lawFilter==="all"}">All</button>
+    ${Object.entries(PILLARS).map(([k,P])=>`<button data-filter="${k}" aria-pressed="${lawFilter===k}">${P.name}</button>`).join("")}
+  </div>`;
+  for(const [k,P] of Object.entries(PILLARS)){
+    if(lawFilter!=="all" && lawFilter!==k) continue;
+    h += `<h2 class="${P.cls}" style="color:var(--pc)">${P.name} <span class="sub">laws ${P.laws}</span></h2><p class="sub">${P.about}</p>`;
+    LAWS.filter(l=>l.p===k).forEach(l => {
+      const n = state.goals.filter(g=>g.law===l.n).length;
+      h += `<details class="law ${P.cls}"><summary><span class="law-num">${l.n}</span><span>${esc(l.t)}${n?` <span class="chip">${n} goal${n>1?"s":""}</span>`:""}</span></summary>
+        <div class="body"><p>${esc(l.g)}</p>
+        <h4>For 3BC</h4><p>${esc(l.a)}</p><p class="ask">${esc(l.q)}</p>
+        <h4>Personal</h4><p>${esc(l.h)}</p><p class="ask">${esc(l.hq)}</p>
+        <div class="row"><button class="btn small" data-act="goal-from" data-law="${l.n}" data-area="biz">Set a 3BC goal</button>
+        <button class="btn small ghost" data-act="goal-from" data-law="${l.n}" data-area="life">Set a personal goal</button></div></div></details>`;
+    });
+  }
+  return h;
+}
+
+function viewNew(){
+  const l = law(draftLaw || weekLaw().n), full = active(draftArea).length >= MAX_ACTIVE;
+  return `<header class="top"><div><h1>New goal</h1><div class="sub">Each section is one of the laws doing its job.</div></div></header>
+  <div class="warn" id="f-full" ${full?"":"hidden"}>You've got ${MAX_ACTIVE} active ${AREAS[draftArea]} goals. This one will save as parked. Law 8: willpower runs out when it's spread thin.</div>
+  <form id="goalForm" novalidate>
+    <label>Is this for 3BC or personal?</label>
+    <div class="seg">${Object.entries(AREAS).map(([k,t])=>`<label><input type="radio" name="area" value="${k}" ${k===draftArea?"checked":""}>${t}</label>`).join("")}</div>
+
+    <label for="f-law">Which law is this built on?</label>
+    <select id="f-law">${Object.entries(PILLARS).map(([k,P])=>`<optgroup label="${P.name}">${LAWS.filter(x=>x.p===k).map(x=>`<option value="${x.n}" ${x.n===l.n?"selected":""}>${x.n}. ${esc(x.t)}</option>`).join("")}</optgroup>`).join("")}</select>
+    <p class="sub" id="f-lawgist" style="margin-top:6px">${esc(apply(l,draftArea))}</p>
+
+    <label for="f-title">The goal<span class="hint" id="f-titlehint">${draftArea==="life"?"Specific and finishable. “Train 4 mornings a week through to Christmas.”":"Specific and finishable. “Get on 2 new insurance builders' panels by March.”"}</span></label>
+    <input type="text" id="f-title" required maxlength="140">
+
+    <label for="f-will">Your “Will I…?” question <span class="hint">Law 6. A yes/no you'll answer every week.</span></label>
+    <input type="text" id="f-will" value="${esc(askQ(l,draftArea))}" maxlength="160">
+
+    <label for="f-due">Target date <span class="hint">Optional.</span></label>
+    <input type="date" id="f-due">
+
+    <label>Which bucket does it fill? <span class="hint">Law 1. Knowledge → skills → network → resources → reputation.</span></label>
+    <div class="buckets" role="radiogroup">${BUCKETS.map((b,i)=>`<label><input type="radio" name="bucket" value="${b}" ${i===0?"checked":""}>${b}</label>`).join("")}</div>
+
+    <label>Pre-mortem <span class="hint">Law 25. It's three months from now and this failed. Why?</span></label>
+    <input type="text" class="f-risk" placeholder="Reason one" style="margin-bottom:6px">
+    <input type="text" class="f-risk" placeholder="Reason two" style="margin-bottom:6px">
+    <input type="text" class="f-risk" placeholder="Reason three">
+
+    <label>Discipline equation <span class="hint">Law 27. Score 1–10.</span></label>
+    ${slider("value","How much the goal matters to you",8)}
+    ${slider("reward","How rewarding the work itself feels",5)}
+    ${slider("cost","How costly or painful the pursuit feels",5)}
+    <div class="equation"><strong id="eq-out">8</strong><span id="eq-msg"></span></div>
+
+    <label for="f-step">Small steps <span class="hint">Law 31. Make them small enough to tick off in a sitting.</span></label>
+    <div class="step-add"><input type="text" id="f-step" placeholder="e.g. List 10 insurance builders on the Coast"><button type="button" class="btn ghost" data-act="draft-step">Add</button></div>
+    <ul class="steps" id="draftSteps">${draftSteps.map((s,i)=>`<li><span style="flex:1">${esc(s)}</span><button type="button" class="btn small danger" data-act="draft-del" data-i="${i}">Remove</button></li>`).join("")}</ul>
+
+    <div class="row" style="margin-top:22px"><button class="btn" type="submit">Save goal</button></div>
+  </form>`;
+}
+function slider(id,label,v){
+  return `<div style="margin-top:8px"><span class="sub">${label}</span><div class="slider"><input type="range" min="1" max="10" value="${v}" id="sc-${id}" aria-label="${label}"><output id="out-${id}">${v}</output></div></div>`;
+}
+function eqUpdate(){
+  const v=+$("#sc-value").value, r=+$("#sc-reward").value, c=+$("#sc-cost").value, s=v+r-c;
+  ["value","reward","cost"].forEach(k=>$("#out-"+k).textContent=$("#sc-"+k).value);
+  $("#eq-out").textContent = s;
+  $("#eq-msg").textContent = s >= 12 ? "Strong. This should hold up." : s >= 7 ? "Workable. Look for a way to make the work more rewarding." : "Fragile. Cut the cost (smaller steps, easier setup) or raise the reward before you start.";
+}
+
+function viewCheckin(){
+  const act = active();
+  if(!act.length) return `<header class="top"><div><h1>Weekly check-in</h1></div></header>
+    <div class="block empty"><h3>No active goals to check in on</h3><p>Set a goal first, then come back each week.</p><button class="btn" data-tab="new">Set a goal</button></div>`;
+  return `<header class="top"><div><h1>Weekly check-in</h1><div class="sub">Law 20: a small miss now is a big miss later. Five minutes, one-degree corrections.</div></div></header>
+  <form id="checkForm">${act.map(g=>{const P=PILLARS[law(g.law).p];return `
+    <div class="block goal ${P.cls}"><span class="pill">${AREAS[g.area]} · Law ${g.law}</span><h3 style="margin:6px 0">${esc(g.title)}</h3>
+      <label style="margin-top:8px">${esc(g.will)}</label>
+      <div class="seg"><label><input type="radio" name="y-${g.id}" value="yes">Yes</label><label><input type="radio" name="y-${g.id}" value="no">No</label></div>
+      <label>Where's it tracking?</label>
+      <div class="seg"><label><input type="radio" name="c-${g.id}" value="on" checked>On line</label><label><input type="radio" name="c-${g.id}" value="off1">1° off</label><label><input type="radio" name="c-${g.id}" value="off">Way off</label></div>
+      <label for="fx-${g.id}">One-degree correction <span class="hint">The smallest change that gets it back on line.</span></label>
+      <input type="text" id="fx-${g.id}">
+      <label for="w-${g.id}">Win this week <span class="hint">Law 31. Any progress counts.</span></label>
+      <input type="text" id="w-${g.id}">
+    </div>`}).join("")}
+    <button class="btn" type="submit">Save check-in</button></form>`;
+}
+
+function viewSettings(){
+  return `<header class="top"><div><h1>Backup</h1><div class="sub">Your goals live in this browser. Copy a backup now and then.</div></div>
+    <button class="icon-btn" data-tab="plan">Close</button></header>
+  <div class="block"><h3>Copy backup</h3><p class="sub">Select all and paste it somewhere safe, like Notes.</p>
+    <textarea readonly id="exp" style="min-height:120px">${esc(JSON.stringify(state))}</textarea>
+    <div class="row"><button class="btn small" data-act="copy">Copy to clipboard</button></div></div>
+  <div class="block"><h3>Restore backup</h3><p class="sub">Paste a backup. This replaces what's here.</p>
+    <textarea id="imp" placeholder='{"goals":[...]}'></textarea>
+    <div class="row"><button class="btn small" data-act="import">Restore</button></div></div>
+  <div class="block"><h3>Start over</h3><p class="sub">Deletes every goal and check-in.</p>
+    <div class="row"><button class="btn small danger" data-act="reset">Delete everything</button></div></div>`;
+}
+
+/* ---------- Render + events ---------- */
+function render(){
+  const views = {plan:viewPlan, laws:viewLaws, new:viewNew, checkin:viewCheckin, settings:viewSettings};
+  $("#app").innerHTML = views[view]();
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-current", b.dataset.tab===view ? "page" : "false"));
+  if(view==="new"){
+    ["value","reward","cost"].forEach(k=>$("#sc-"+k).addEventListener("input",eqUpdate)); eqUpdate();
+    const refresh = ()=>{
+      const x=law($("#f-law").value); draftLaw=x.n;
+      draftArea=document.querySelector("input[name=area]:checked").value;
+      $("#f-will").value=askQ(x,draftArea); $("#f-lawgist").textContent=apply(x,draftArea);
+      $("#f-titlehint").textContent = draftArea==="life" ? "Specific and finishable. “Train 4 mornings a week through to Christmas.”" : "Specific and finishable. “Get on 2 new insurance builders' panels by March.”";
+      const full=$("#f-full"); full.hidden = active(draftArea).length < MAX_ACTIVE;
+      full.textContent = `You've got ${MAX_ACTIVE} active ${AREAS[draftArea]} goals. This one will save as parked. Law 8: willpower runs out when it's spread thin.`;
+    };
+    $("#f-law").addEventListener("change", refresh);
+    document.querySelectorAll("input[name=area]").forEach(r=>r.addEventListener("change", refresh));
+    $("#f-step").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addDraftStep(); }});
+    $("#goalForm").addEventListener("submit", saveGoal);
+  }
+  if(view==="checkin" && $("#checkForm")) $("#checkForm").addEventListener("submit", saveCheckin);
+}
+function go(v){ view=v; render(); window.scrollTo(0,0); }
+function addDraftStep(){
+  const i=$("#f-step"); if(!i.value.trim()) return;
+  draftSteps.push(i.value.trim()); i.value="";
+  $("#draftSteps").innerHTML = draftSteps.map((s,k)=>`<li><span style="flex:1">${esc(s)}</span><button type="button" class="btn small danger" data-act="draft-del" data-i="${k}">Remove</button></li>`).join("");
+  i.focus();
+}
+function saveGoal(e){
+  e.preventDefault();
+  const title = $("#f-title").value.trim();
+  if(!title){ $("#f-title").focus(); toast("Give the goal a name first"); return; }
+  if($("#f-step").value.trim()) addDraftStep();
+  const area = document.querySelector("input[name=area]:checked").value;
+  const g = {
+    id:uid(), area, law:+$("#f-law").value, title, will:$("#f-will").value.trim() || askQ(law($("#f-law").value), area),
+    due:$("#f-due").value || null, bucket:(document.querySelector("input[name=bucket]:checked")||{}).value || "Knowledge",
+    risks:[...document.querySelectorAll(".f-risk")].map(i=>i.value.trim()),
+    scores:{value:+$("#sc-value").value, reward:+$("#sc-reward").value, cost:+$("#sc-cost").value},
+    steps:draftSteps.map(t=>({id:uid(), text:t, done:false})),
+    status: active(area).length >= MAX_ACTIVE ? "parked" : "active",
+    created:new Date().toISOString(), checkins:[]
+  };
+  state.goals.push(g); save(); draftSteps=[]; draftLaw=null;
+  toast(g.status==="parked" ? "Goal saved as parked" : "Goal saved"); go("plan");
+}
+function saveCheckin(e){
+  e.preventDefault();
+  const d = new Date().toISOString();
+  active().forEach(g=>{
+    const y = document.querySelector(`input[name="y-${g.id}"]:checked`);
+    g.checkins.push({d, yes: y ? y.value==="yes" : null,
+      course: document.querySelector(`input[name="c-${g.id}"]:checked`).value,
+      fix: $("#fx-"+g.id).value.trim(), win: $("#w-"+g.id).value.trim()});
+  });
+  save(); toast("Check-in saved"); go("plan");
+}
+const findGoal = id => state.goals.find(g=>g.id===id);
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("[data-tab],[data-act],[data-filter],[data-area]"); if(!t) return;
+  if(t.dataset.tab){ go(t.dataset.tab); return; }
+  if(t.dataset.filter){ lawFilter=t.dataset.filter; render(); return; }
+  if(!t.dataset.act && t.dataset.area){ areaFilter=t.dataset.area; render(); return; }
+  const a=t.dataset.act, g=t.dataset.id?findGoal(t.dataset.id):null;
+  switch(a){
+    case "settings": go("settings"); break;
+    case "goal-from": draftLaw=+t.dataset.law; draftArea=t.dataset.area||"biz"; draftSteps=[]; go("new"); break;
+    case "draft-step": addDraftStep(); break;
+    case "draft-del": draftSteps.splice(+t.dataset.i,1); t.closest("li").remove(); break;
+    case "step": { const s=g.steps.find(s=>s.id===t.dataset.step); s.done=t.checked; save(); render(); if(s.done) toast("Step ticked off"); break; }
+    case "add-step": { const txt=prompt("New step"); if(txt&&txt.trim()){ g.steps.push({id:uid(),text:txt.trim(),done:false}); save(); render(); } break; }
+    case "done": g.status="done"; g.doneAt=new Date().toISOString(); save(); render(); toast("Marked done"); break;
+    case "park": g.status="parked"; save(); render(); toast("Parked"); break;
+    case "activate": if(active(g.area).length<MAX_ACTIVE){ g.status="active"; save(); render(); toast("Now active"); } break;
+    case "delete": if(confirm("Delete this goal and its check-ins?")){ state.goals=state.goals.filter(x=>x.id!==g.id); save(); render(); toast("Deleted"); } break;
+    case "copy": { const ta=$("#exp"); ta.select(); (navigator.clipboard?navigator.clipboard.writeText(ta.value):Promise.reject()).then(()=>toast("Backup copied")).catch(()=>{document.execCommand("copy");toast("Backup copied");}); break; }
+    case "import": try{ const d=JSON.parse($("#imp").value); if(!Array.isArray(d.goals)) throw 0; state=d; save(); toast("Backup restored"); go("plan"); }catch(_){ toast("That backup couldn't be read. Paste the full text."); } break;
+    case "reset": if(confirm("Delete every goal and check-in? This can't be undone.")){ state={goals:[]}; save(); toast("Everything deleted"); go("plan"); } break;
+  }
+});
+render();
+</script>
+</body>
+</html>
